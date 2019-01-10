@@ -1,0 +1,16 @@
+CREATE TABLE Minions(
+    Id INT NOT NULL, 
+    [Name] NVARCHAR(50) NOT NULL, 
+    Age INT, 
+    CONSTRAINT PK_Minions PRIMARY KEY (Id)
+)
+
+SELECT * FROM Minions
+
+CREATE TABLE Towns(
+    Id INT NOT NULL, 
+    [Name] NVARCHAR(50) NOT NULL, 
+    CONSTRAINT PK_Towns PRIMARY KEY (Id)
+)
+
+SELECT * FROM Towns
