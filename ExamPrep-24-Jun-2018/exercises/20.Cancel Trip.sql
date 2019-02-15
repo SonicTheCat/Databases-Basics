@@ -1,0 +1,19 @@
+CREATE TRIGGER tr_TRIGGER
+ON Trips 
+INSTEAD OF DELETE 
+AS 
+BEGIN 
+	UPDATE Trips
+	SET CancelDate = GETDATE()
+	WHERE Id IN 
+	(
+		SELECT t.Id FROM Trips AS t
+		JOIN deleted AS d
+		ON d.Id = t.Id
+		WHERE d.CancelDate IS NULL
+	)
+END
+
+
+DELETE FROM Trips
+WHERE Id IN (48, 49, 50)

@@ -1,0 +1,4 @@
+SELECT Id, NAME
+FROM Cities
+WHERE CountryCode = 'BG'
+ORDER BY NAME

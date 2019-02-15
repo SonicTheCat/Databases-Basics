@@ -1,0 +1,67 @@
+CREATE TABLE Cities
+(
+	Id            INT PRIMARY KEY NOT NULL IDENTITY,
+	 [Name]          NVARCHAR(20)    NOT NULL,
+	 CountryCode VARCHAR(2) NOT NULL
+)
+
+CREATE TABLE Hotels
+(
+  Id            INT PRIMARY KEY NOT NULL IDENTITY,
+  Name          NVARCHAR(30)    NOT NULL,
+  CityId        INT             NOT NULL FOREIGN KEY REFERENCES Cities (Id),
+  EmployeeCount INT             NOT NULL,
+  BaseRate      DECIMAL(15, 2)
+)
+
+CREATE TABLE Rooms
+(
+	Id INT PRIMARY KEY IDENTITY,
+	PRICE DECIMAL(15,2) NOT NULL, 
+	[Type] NVARCHAR(20) NOT NULL, 
+	Beds INT NOT NULL, 
+	HotelId INT NOT NULL REFERENCES Hotels(Id)
+)
+
+CREATE TABLE Trips
+(
+	Id INT IDENTITY PRIMARY KEY,
+	RoomId INT NOT NULL FOREIGN KEY REFERENCES Rooms(Id),
+	BookDate DATE NOT NULL,
+	ArrivalDate DATE NOT NULL,
+	ReturnDate DATE NOT NULL,
+	CancelDate DATE,
+
+	CONSTRAINT CHK_BOOKDATE
+	CHECK (BookDate < ArrivalDate),
+
+	CONSTRAINT CHK_ARRIVALDATE
+	CHECK (ArrivalDate < ReturnDate)
+)
+
+CREATE TABLE Accounts
+(
+	Id INT IDENTITY PRIMARY KEY,
+	FirstName NVARCHAR(50) NOT NULL, 
+	MiddleName NVARCHAR(20), 
+	LastName NVARCHAR(50) NOT NULL,
+	CityId INT NOT NULL FOREIGN KEY REFERENCES Cities(Id),
+	BirthDate DATE NOT NULL, 
+	Email NVARCHAR(100) NOT NULL UNIQUE
+)
+
+CREATE TABLE AccountsTrips
+(
+	AccountId INT NOT NULL, 
+	TripId INT NOT NULL, 
+	Luggage INT CHECK(Luggage >= 0), 
+
+	CONSTRAINT PK_AccountsTrips
+	PRIMARY KEY (AccountId, TripId), 
+
+	CONSTRAINT FK_ACCOUNT 
+    FOREIGN KEY (AccountId) REFERENCES  Accounts(Id),
+
+	CONSTRAINT FK_Trip
+    FOREIGN KEY (TripId) REFERENCES Trips(Id)
+)
